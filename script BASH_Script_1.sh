@@ -1,4 +1,4 @@
-! /bin/sh
+#! /bin/sh
 
 echo "Welcome to the soda machine. You can enter values of 5, 10, or 25 in payment"
 echo ""
