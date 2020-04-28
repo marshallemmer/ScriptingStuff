@@ -1,0 +1,5 @@
+#Marshall Emmer
+! /bin/sh
+
+curl -k sftp://139.78.8.200/home/msis4713/BASH_Script_4_Starter.sh -u msis4713 > BASH_Script_4_Starter.sh
+pw scripting1
