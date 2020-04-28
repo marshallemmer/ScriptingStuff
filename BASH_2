@@ -1,0 +1,28 @@
+! /bin/sh
+
+multNum=0
+function MultAdd
+{
+	#Get the number sent to the function
+	multNum=$1
+	multNum=$((($multNum*$multNum)+$multNum))
+	#echo $multNum
+}
+
+#Make the main while loop
+while true;
+do
+	userIn=0
+	read -p "Please enter an integer from 1-10, q to quit: " userIn
+	if [[ $userIn -gt 0 && $userIn -lt 11 ]];then
+		MultAdd $userIn
+		echo $multNum
+	elif [[ $userIn -lt 0 || $userIn -gt 11 ]];then
+		echo "Error: Invalid Input Please Try Again"
+	else
+		#If we get here the user entered q to exit the code
+		echo "Quitting..."
+		break
+	fi
+	echo ""
+done
