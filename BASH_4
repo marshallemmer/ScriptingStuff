@@ -1,5 +1,74 @@
+#!/bin/bash
 #Marshall Emmer
-! /bin/sh
 
-curl -k sftp://139.78.8.200/home/msis4713/BASH_Script_4_Starter.sh -u msis4713 > BASH_Script_4_Starter.sh
-pw scripting1
+lyrics_string="Quisiera:Ayer:cambiarle:conocí:el:un:final:cielo:al:sin:cuento|Las:sol|Y:barras:un:y:hombre:los:sin:tragos:suelo|Un:han:santo:sido:en:testigo|De:prision|Y:el:una:dolor:canción:que:triste:me:sin:causaste:dueño|Y:y:conocí:to':tus:lo:ojos:que:negros|Y:hiciste:ahora:conmigo|Un:sí:infeliz:que:en:no:el:puedo:amor,:vivir:que:sin:aun:ellos:no:yo|Le:te:pido:supera|Que:al:ahora:cielo:camina:solo:solo:un:sin:deseo|Que:nadie:en:por:tus:todas:ojos:las:yo:aceras|Preguntándole:pueda:a:vivir|He:Dios:recorrido:si:el:en:mundo:verdad:entero|te:el:vengo:amor:a:existe|:decir|"
+
+#echo $lyrics_string
+#echo ""
+
+#Step 1: Use the sed to replace the : with spaces
+lyrics_string=$(echo $lyrics_string | sed 's/:/ /g')
+lyrics_string=$(echo $lyrics_string | sed 's/|/\n/g')
+#echo $lyrics_string
+
+#Step 2: Use cut -d to turn the lyrics into an array
+declare -a lyricArr=()
+lyricArr=($(echo $lyrics_string | cut -d " " -f 1-))
+#echo ${lyricArr[*]}
+
+#Step 3: Divide up the lyrics array into two arrays
+#for i in ${myArr[*]};
+declare -a songArr1=()
+declare -a songArr2=()
+
+#+= wont work so we will make a second index to track the placement for added values in the individual song arrays
+echo ""
+arrLen=${#lyricArr[*]}
+for(( index=0; index<$arrLen; index=index+2));
+do
+	#We are going to move the values into temp holding variables so the info gets added one at a time to the array and not in one giant line on element 0
+	hold=${lyricArr[$index]}
+	hold2=${lyricArr[$index+1]}
+	#echo "hold = " $hold
+	#songArr1+=${lyricArr[$index]}
+	songArr1+=($hold)
+	songArr2+=($hold2)
+done
+
+#echo "Test Print the Arrays"
+#songArr1=$(echo $songArr1 | sed 's/|/\n/g')
+echo -e ${songArr1[*]}
+echo ""
+#songArr2=$(echo $songArr2 | sed 's/|/\n/g')
+echo -e ${songArr2[*]}
+echo ""
+
+#Now determine what words are in both songs
+#To do this we will loop through every word in one of the lists, if it appears in the other we copy it, but if it exists in the array already we will not
+declare -a dupArr=()
+#This massive loop mess will find the duplicates and add them
+for i in ${songArr1[*]};
+do
+	for q in ${songArr2[*]};
+	do
+		if [ $i == $q ];then
+			#now run the loop through the dup array to see if it isnt already present
+			exist=0
+			for z in ${dupArr[*]};
+			do
+				if [ $i == $z ];then
+					exist=$exist+1
+				fi
+			done
+			#Copy the element to the dup array
+			if [ $exist == 0 ];then
+				dupArr+=($i)
+			fi
+		fi
+	done
+done
+
+dupArr=($(for i in ${dupArr[*]}; do echo $i; done | sort))
+echo -e "Words that are in both strings " ${dupArr[*]}
+echo ""
+read -p 'Press enter to exit the script '
