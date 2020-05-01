@@ -94,7 +94,7 @@ function addNewName
 	while $true
 	do
 		read -p "Enter the new first name: " fName
-		#pattern="+[[:space:]]+"
+		pattern="+[[:space:]]+"
 		#echo "Debug: fName = " $fName
 		if [[ $fname =~ $pattern ]];then
 			#If we get here there was a space in the first name
